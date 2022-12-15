@@ -13,5 +13,15 @@ import java.util.List;
 @AllArgsConstructor
 public class CartService {
 
+    private final CartRepository cartRepository;
+
+    public Cart createCart(int userId) {
+
+        return cartRepository.save(
+                Cart.builder()
+                        .userId(userId)
+                        .build()
+        );
+    }
 
 }

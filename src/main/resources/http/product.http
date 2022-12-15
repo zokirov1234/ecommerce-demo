@@ -7,3 +7,6 @@ Content-Type: application/json
   "description" : "its fruit",
   "categoryName" : "fruit"
 }
+
+###
+GET http://localhost:8081/product/get/2

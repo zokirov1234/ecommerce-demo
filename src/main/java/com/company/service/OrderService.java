@@ -18,22 +18,21 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
 
-    public boolean addOrder(OrderReceiveDTO orderReceiveDTO, int userId){
+    public boolean addOrder(OrderReceiveDTO orderReceiveDTO, int userId, Cart cart){
 
         Optional<Product> product =
                 productRepository.findByName(orderReceiveDTO.getProductName());
 
-        Cart cart1 = new Cart();
-        cart1.setUserId(userId);
-        cart1.setTotalPrice(cart1.getTotalPrice() + overAllPrice(product.get().getId()));
+        cart.setUserId(userId);
+        cart.setTotalPrice(cart.getTotalPrice() + overAllPrice(product.get().getId()));
 
-        cartRepository.save(cart1);
+        cartRepository.save(cart);
 
         orderRepository.save(
                 Order.builder()
                         .productId(product.get().getId())
                         .userId(userId)
-                        .cartId(cart1.getId())
+                        .cartId(cart.getId())
                         .build()
         );
 

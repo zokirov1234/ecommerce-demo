@@ -41,4 +41,14 @@ public class ProductService {
                 productReceiveDTO.getDescription(), category.get().getName());
     }
 
+    public ProductResponseDTO getProduct(int productId) {
+        Optional<Product> product = productRepository.findById(productId);
+
+        if (product.isEmpty()) {
+            throw new BadRequestException("product not found exception");
+        }
+
+        return new ProductResponseDTO(product.get().getName(),product.get().getPrice(),product.get().getDescription(),product.get().getCategory().getName());
+    }
+
 }
