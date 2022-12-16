@@ -1,6 +1,5 @@
 package com.company.config.auth;
 
-import com.company.config.CustomUserDetails;
 import com.company.model.entity.UserEntity;
 import com.company.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +28,6 @@ public class AuthService implements UserDetailsService {
             throw new UsernameNotFoundException(username + " not found");
         }
 
-        return new CustomUserDetails(user.get());
+        return user.get();
     }
 }

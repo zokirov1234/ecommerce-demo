@@ -1,0 +1,9 @@
+POST http://localhost:8081/product/public/add
+Content-Type: application/json
+
+{
+  "name" : "apple",
+  "price" : 12.3,
+  "description" : "its fruit",
+  "categoryName" : "fruit"
+}

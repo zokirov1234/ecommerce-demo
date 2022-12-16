@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/category")
@@ -13,13 +15,21 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PostMapping("/admin/add")
+    @PostMapping("/admin/add/{name}")
     public ResponseEntity<Category> createCategory(
-            @RequestBody String name
+            @PathVariable("name") String name
     ){
-        System.out.println("dhfjhsdjhfjs"+ "name: " + name);
+
         Category category = categoryService.addCategory(name);
 
         return ResponseEntity.ok().body(category);
+    }
+
+
+    @GetMapping("/admin/get")
+    public ResponseEntity<List<Category>> getCategory(){
+        List<Category> categories = categoryService.categoryList();
+
+        return ResponseEntity.ok().body(categories);
     }
 }

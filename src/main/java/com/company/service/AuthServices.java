@@ -2,6 +2,7 @@ package com.company.service;
 
 import com.company.exp.BadRequestException;
 import com.company.model.dto.AuthDto;
+import com.company.model.entity.Role;
 import com.company.model.entity.UserEntity;
 import com.company.model.enums.RoleEnum;
 import com.company.repository.UserRepository;
@@ -9,7 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class AuthServices {
         userRepository.save(
                 UserEntity.builder()
                         .username(authDto.getUsername())
-                        .roleEnum(RoleEnum.ROLE_ADMIN)
+                        .roleEntityList(List.of(new Role(1,RoleEnum.ADMIN)))
                         .password(passwordEncoder.encode(authDto.getPassword()))
                         .build()
         );

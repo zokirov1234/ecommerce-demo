@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -16,9 +17,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthService authService;
 
-    public SecurityConfig(AuthService authService) {
-        this.authService = authService;
-    }
 
     private static final String[] AUTH_WHITELIST = {
             "/v2/api-docs",
@@ -32,19 +30,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-resources/**"
     };
 
+    public SecurityConfig(AuthService authService) {
+        this.authService = authService;
+    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable();
+        http.cors().disable().csrf().disable();
 
-        http
-                .authorizeRequests()
-                .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers("/*/public/**").permitAll()
-                .antMatchers("/*/admin/**").hasAnyRole("USER,ADMIN")
-                .anyRequest().authenticated();
+        http.authorizeRequests()
+                        .antMatchers("/*").permitAll();
+//                .antMatchers(AUTH_WHITELIST).permitAll()
+//                .antMatchers("/*/public/**").permitAll()
+//                .antMatchers("/register").permitAll()
+//                .antMatchers("/login").permitAll()
+//                .antMatchers("/*/admin/**").hasAuthority("ADMIN")
+//                .anyRequest().authenticated()
+//                .and().formLogin().loginPage("/login");
 
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
     }
 
     @Override
