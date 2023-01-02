@@ -14,4 +14,16 @@ import java.util.List;
 public class CartService {
 
 
+    private final CartRepository cartRepository;
+
+    public Cart createCart(int userId) {
+
+        return cartRepository.save(
+                Cart.builder()
+                        .userId(userId)
+                        .build()
+        );
+    }
+
+
 }

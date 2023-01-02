@@ -1,14 +1,16 @@
 package com.company.model.entity;
 
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Data
@@ -17,7 +19,7 @@ import java.sql.Timestamp;
 @Builder
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +31,8 @@ public class Product {
     private double price;
 
     private String description;
+
+    private String imageUrl;
 
     @Column(name = "category_id")
     private int categoryId;
@@ -52,4 +56,8 @@ public class Product {
 
     @Column(name = "modified_at")
     private Timestamp modifiedAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
 }

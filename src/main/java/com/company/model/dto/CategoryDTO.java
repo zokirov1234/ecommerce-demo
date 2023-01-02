@@ -4,15 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductResponseDTO implements Serializable {
-    private String name;
-    private double price;
-    private String description;
-    private String categoryName;
+public class CategoryDTO {
 
+    private String name;
+    private String description;
 }

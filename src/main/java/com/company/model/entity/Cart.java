@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -34,5 +35,6 @@ public class Cart {
     private UserEntity user;
 
     @Column(name = "created_at")
+    @CreationTimestamp
     private Timestamp createdAt;
 }

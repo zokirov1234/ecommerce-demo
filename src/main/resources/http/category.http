@@ -1,9 +1,13 @@
-POST http://localhost:8081/category/admin/add/fruit
-#Content-Type: application/json
-#
-#{
-#  "name" : "apple"
-#}
+POST http://localhost:8081/category/admin/add/cars
 
 ###
-GET http://localhost:8081/category/admin/get
+GET http://localhost:8081/category/get
+
+###
+POST http://localhost:8081/category/admin/edit/1
+Content-Type: application/json
+
+{
+  "name" : "phones",
+  "description" : "modern phones"
+}

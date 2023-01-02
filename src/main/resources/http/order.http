@@ -1,0 +1,9 @@
+POST http://localhost:8081/order/add
+Content-Type: application/json
+
+{
+  "productName" : "banana"
+}
+
+###
+GET http://localhost:8081/order/remove/3
