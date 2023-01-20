@@ -1,47 +1,63 @@
 package com.company.service;
 
-import com.company.model.dto.OrderReceiveDTO;
-import com.company.model.entity.Cart;
-import com.company.model.entity.Order;
-import com.company.model.entity.Product;
-import com.company.repository.*;
-import lombok.AllArgsConstructor;
+import com.company.model.dto.checkout.CheckoutItemDTO;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
+import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class OrderService {
 
-    private final ProductRepository productRepository;
-    private final OrderRepository orderRepository;
-    private final CartRepository cartRepository;
+    public Session createSession(List<CheckoutItemDTO> checkoutItemDTOList) throws StripeException {
 
-    public boolean addOrder(OrderReceiveDTO orderReceiveDTO, int userId){
+        String stripeSecretKey = "sk_test_51MReq8I5jKqYUmZvx7Uq4XGkQKJUNhRo6h5APeMY7t2VF2UmATzYnArQSFNXfu5DK8hW7XqfTJu6JJL2PtVGTFbv00WArfAaz4";
+        String baseUrl = "http://localhost:8080/";
 
-        Optional<Product> product =
-                productRepository.findByName(orderReceiveDTO.getProductName());
+        String successUrl = baseUrl + "payment/success";
+        String failureUrl = baseUrl + "payment/failed";
 
-        Cart cart1 = new Cart();
-        cart1.setUserId(userId);
-        cart1.setTotalPrice(cart1.getTotalPrice() + overAllPrice(product.get().getId()));
+        Stripe.apiKey = stripeSecretKey;
 
-        cartRepository.save(cart1);
+        List<SessionCreateParams.LineItem> sessionItemList = new ArrayList<>();
 
-        orderRepository.save(
-                Order.builder()
-                        .productId(product.get().getId())
-                        .userId(userId)
-                        .cartId(cart1.getId())
-                        .build()
-        );
+        for (CheckoutItemDTO checkoutItemDTO : checkoutItemDTOList) {
+            sessionItemList.add(createSessionLineItem(checkoutItemDTO));
+        }
 
+        SessionCreateParams sessionCreateParams = SessionCreateParams.builder()
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .setMode(SessionCreateParams.Mode.PAYMENT)
+                .setCancelUrl(failureUrl)
+                .addAllLineItem(sessionItemList)
+                .setSuccessUrl(successUrl)
+                .build();
 
-        return true;
+        return Session.create(sessionCreateParams);
+
     }
 
-    private double overAllPrice(int productId) {
-        return productRepository.findById(productId).get().getPrice();
+    SessionCreateParams.LineItem createSessionLineItem(CheckoutItemDTO checkoutItemDTO) {
+
+        return SessionCreateParams.LineItem.builder()
+                .setPriceData(createPriceData(checkoutItemDTO))
+                .setQuantity(Long.parseLong(String.valueOf(checkoutItemDTO.getQuantity())))
+                .build();
+    }
+
+    SessionCreateParams.LineItem.PriceData createPriceData(CheckoutItemDTO checkoutItemDTO) {
+
+        return SessionCreateParams.LineItem.PriceData.builder()
+                .setCurrency("usd")
+                .setUnitAmount((long) (checkoutItemDTO.getPrice() * 100))
+                .setProductData(
+                        SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                .setName(checkoutItemDTO.getProductName())
+                                .build()
+                ).build();
     }
 }

@@ -1,6 +1,7 @@
 package com.company.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,37 +26,36 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String name;
 
     private double price;
 
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
     @Column(name = "category_id")
     private int categoryId;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
 
-    @Column(name = "user_id")
-    private int userId;
+//    @Column(name = "user_id")
+//    private int userId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private UserEntity user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+//    private UserEntity user;
 
 
     @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;
 
-
-    @Column(name = "modified_at")
-    private Timestamp modifiedAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")

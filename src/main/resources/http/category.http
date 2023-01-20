@@ -1,4 +1,10 @@
-POST http://localhost:8081/category/admin/add/cars
+POST http://localhost:8081/category/admin/add
+Content-Type: application/json
+
+{
+  "name" : "phone",
+  "description" : "simple design"
+}
 
 ###
 GET http://localhost:8081/category/get

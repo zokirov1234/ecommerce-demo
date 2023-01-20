@@ -1,11 +1,10 @@
 package com.company.service;
 
 import com.company.exp.BadRequestException;
-import com.company.model.dto.CategoryDTO;
+import com.company.model.dto.category.CategoryDTO;
 import com.company.model.entity.Category;
 import com.company.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +31,7 @@ public class CategoryService {
     }
 
 
-    @Cacheable(value = "categoryList")
+//    @Cacheable(value = "categoryList")
     public List<Category> categoryList() {
         return categoryRepository.findAll();
     }

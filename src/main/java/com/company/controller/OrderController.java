@@ -1,45 +1,36 @@
 package com.company.controller;
 
-import com.company.model.dto.OrderReceiveDTO;
-import com.company.model.dto.OrderResponseDTO;
-import com.company.model.entity.Cart;
-import com.company.service.CartService;
+import com.company.model.dto.checkout.CheckoutItemDTO;
+import com.company.model.dto.checkout.StripeResponse;
 import com.company.service.OrderService;
+import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
 import io.swagger.annotations.Api;
-import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/order")
-@AllArgsConstructor
 @Api(tags = "Order Controller")
 public class OrderController {
 
-    static boolean isPurchased = true;
-    static Cart cart;
-
-    private final CartService cartService;
     private final OrderService orderService;
 
-    @PostMapping("/add")
-    public ResponseEntity<OrderResponseDTO> createOrder(
-            @RequestBody OrderReceiveDTO orderReceiveDTO
-    ) {
-        if (isPurchased) {
-            cart = cartService.createCart(1);
-            isPurchased = false;
-        }
-
-        OrderResponseDTO order = orderService.addOrder(orderReceiveDTO, 1, cart);
-
-        return ResponseEntity.ok().body(order);
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
-    @GetMapping("/remove/{orderId}")
-    public boolean removeOrder(
-            @PathVariable("orderId") int id
-    ) {
-        return orderService.deleteOrder(id);
+    @PostMapping("/create-checkout-session")
+    public ResponseEntity<StripeResponse> checkoutList(
+            @RequestBody List<CheckoutItemDTO> checkoutItemDTOList
+    ) throws StripeException {
+        Session session = orderService.createSession(checkoutItemDTOList);
+        StripeResponse stripeResponse = new StripeResponse(session.getId());
+
+        return ResponseEntity.ok().body(stripeResponse);
     }
+
+
 }

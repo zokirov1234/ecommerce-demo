@@ -1,6 +1,6 @@
 package com.company.controller;
 
-import com.company.model.dto.CategoryDTO;
+import com.company.model.dto.category.CategoryDTO;
 import com.company.model.entity.Category;
 import com.company.service.CategoryService;
 import io.swagger.annotations.Api;

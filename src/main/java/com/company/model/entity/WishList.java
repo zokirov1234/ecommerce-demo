@@ -1,6 +1,5 @@
 package com.company.model.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,33 +14,20 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "orders")
-public class Order {
+@Table(name = "wishlist")
+public class WishList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "product_id")
-    private int productId;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
-    private Product product;
-
-    @Column(name = "user_id")
-    private int userId;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @Column(name = "cart_id")
-    private int cartId;
-
     @ManyToOne
-    @JoinColumn(name = "cart_id", insertable = false, updatable = false)
-    private Cart cart;
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @CreationTimestamp
     @Column(name = "created_at")

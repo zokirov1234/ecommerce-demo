@@ -1,6 +1,5 @@
 package com.company.model.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,24 +14,21 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "cart")
-public class Cart {
+@Table(name = "token")
+public class TokenEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    private int quantity;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private String token;
 
     @Column(name = "created_at")
     @CreationTimestamp
     private Timestamp createdAt;
+
+    @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "user_id")
+    private UserEntity user;
+
 }

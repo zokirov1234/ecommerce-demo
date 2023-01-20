@@ -1,4 +1,4 @@
-package com.company.model.dto;
+package com.company.model.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -15,6 +15,8 @@ public class ProductReceiveDTO implements Serializable {
 
     private String name;
     private double price;
-    private String categoryName;
+    private int categoryId;
     private String description;
+    private String imageUrl;
+
 }

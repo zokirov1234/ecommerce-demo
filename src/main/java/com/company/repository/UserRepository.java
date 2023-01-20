@@ -1,13 +1,8 @@
 package com.company.repository;
 
 import com.company.model.entity.UserEntity;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
-public interface UserRepository extends CrudRepository<UserEntity, Integer> {
-
-    Optional<UserEntity> findByUsername(String username);
-
-    boolean existsByUsername(String username);
+public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+    UserEntity findByEmail(String email);
 }
